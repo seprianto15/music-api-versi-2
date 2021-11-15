@@ -21,7 +21,7 @@ class PlaylistSongsHandler {
 
       await this._servicePlaylist.verifyPlaylistOwner(playlistId, credentialId);
 
-      const playlistsongsId = await this._servicePlaylist.addPlaylistSong({ songId, playlistId });
+      const playlistsongsId = await this._service.addPlaylistSong({ songId, playlistId });
 
       const response = h.response({
         status: 'success',
