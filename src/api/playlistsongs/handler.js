@@ -15,13 +15,14 @@ class PlaylistSongsHandler {
       const { id: credentialId } = request.auth.credentials;
 
       await this._service.verifyPlaylistOwner(playlistId, credentialId);
-      await this._service.addPlaylistSong({ songId, playlistId });
+
+      const playlistsongsId = await this._service.addPlaylistSong({ songId, playlistId });
 
       const response = h.response({
         status: 'success',
         message: 'Lagu berhasil ditambahkan ke playlist',
         data: {
-          songId,
+          playlistsongsId,
         },
       });
       response.code(201);
