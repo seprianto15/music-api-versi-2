@@ -96,11 +96,15 @@ class PlaylistSongsHandler {
       const { id: credentialId } = request.auth.credentials;
 
       await this._servicePlaylist.verifyPlaylistOwner(playlistId, credentialId);
-      await this._service.deletePlaylistSongById(playlistId, songId);
+
+      const playlistsongsId = await this._service.deletePlaylistSongById(playlistId, songId);
 
       return {
         status: 'success',
         message: 'Lagu berhasil dihapus dari playlist',
+        data: {
+          playlistsongsId,
+        },
       };
     } catch (error) {
       if (error instanceof ClientError) {
