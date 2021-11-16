@@ -11,7 +11,7 @@ class CollaborationsService {
     const id = `collab-${nanoid(16)}`;
     const query = {
       text: 'INSERT INTO collaborations VALUE($1, $2, $3) RETURNING id',
-      value: [id, playlistId, userId],
+      values: [id, playlistId, userId],
     };
 
     const result = await this._pool.query(query);
@@ -26,7 +26,7 @@ class CollaborationsService {
   async deleteCollaboration({ playlistId, userId }) {
     const query = {
       text: 'DELETE FROM collaborations WHERE playlist_id = $1 AND user_id = $2 RETURNING id',
-      value: [playlistId, userId],
+      values: [playlistId, userId],
     };
 
     const result = await this._pool.query(query);
@@ -39,7 +39,7 @@ class CollaborationsService {
   async verifyCollaborator(playlistId, userId) {
     const query = {
       text: 'SELECT * FROM collaborations WHERE playlist_id = $1 AND user_id = $2',
-      value: [playlistId, userId],
+      values: [playlistId, userId],
     };
 
     const result = await this._pool.query(query);
