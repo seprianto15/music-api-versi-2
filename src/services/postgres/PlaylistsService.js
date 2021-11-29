@@ -23,7 +23,8 @@ class PlaylistsService {
     if (!result.rowCount) {
       throw new InvariantError('Playlist gagal ditambahkan');
     }
-    await this._cacheService.delete(`playlists:${owner}}`);
+
+    await this._cacheService.delete(`playlists:${owner}`);
     return result.rows[0].id;
   }
 
@@ -36,18 +37,18 @@ class PlaylistsService {
         text: 'SELECT p.id, p.name, u.username FROM playlists p INNER JOIN users u ON p.owner = u.id LEFT JOIN collaborations c ON c.playlist_id = p.id WHERE p.owner= $1 OR c.user_id = $1',
         values: [owner],
       };
-
       const result = await this._pool.query(query);
+      const mappedResult = result.rows;
 
-      await this._cacheService.set(`playlists:${owner}`, JSON.stringify(result.rows));
+      await this._cacheService.set(`playlists:${owner}`, JSON.stringify(mappedResult));
 
-      return result.rows;
+      return mappedResult;
     }
   }
 
   async deletePlaylistByOwner(id) {
     const query = {
-      text: 'DELETE FROM playlists WHERE id = $1 RETURNING id',
+      text: 'DELETE FROM playlists WHERE id = $1 RETURNING id, owner',
       values: [id],
     };
 
@@ -56,6 +57,7 @@ class PlaylistsService {
     if (!result.rowCount) {
       throw new InvariantError('Playlist gagal dihapus');
     }
+
     const { owner } = result.rows[0];
     await this._cacheService.delete(`playlists:${owner}`);
   }

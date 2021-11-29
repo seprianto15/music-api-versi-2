@@ -53,10 +53,10 @@ const UploadsValidator = require('./validator/uploads');
 const CacheService = require('./services/redis/CacheService');
 
 const init = async () => {
-  const cacheService = new CacheService();
   const songsService = new SongsService();
   const usersService = new UsersService();
   const authenticationsService = new AuthenticationsService();
+  const cacheService = new CacheService();
   const collaborationsService = new CollaborationsService(cacheService);
   const playlistsService = new PlaylistsService(collaborationsService, cacheService);
   const playlistsongsService = new PlaylistSongsService(cacheService);
